@@ -3,265 +3,151 @@ package member.view;
 import java.util.List;
 import java.util.Scanner;
 
-import javax.swing.text.html.HTMLDocument.Iterator;
-
 import member.controller.MemberController;
 import member.model.vo.Member;
 
 public class MemberMenu {
 	
 	private MemberController memberController = new MemberController();
-	//ÇÊµå·Î ¼±¾ğÇØÁÜ
-
-	//½ºÄ³³Ê ÇÊµå·Î ¼±¾ğÇØ¼­ ´Ù¸¥ ¸Ş¼ÒµåÇÏ°íµµ °øÀ¯
-	private Scanner sc= new Scanner(System.in);
+	private Scanner sc = new Scanner(System.in);
 	
 	public void mainMenu() {
-		String menu ="======= È¸¿ø °ü¸® ÇÁ·Î±×·¥ =======\n"
-				+ "1. È¸¿ø ÀüÃ¼ Á¶È¸ \n"
-				+ "2. È¸¿ø ¾ÆÀÌµğ Á¶È¸\n"
-				+ "3. È¸¿ø ÀÌ¸§ Á¶È¸\n"
-				+ "4. È¸¿ø °¡ÀÔ\n"
-				+ "5. È¸¿ø Á¤º¸º¯°æ\n"
-				+ "6. È¸¿øÅ»Åğ\n"
-				+ "0. ÇÁ·Î±×·¥ ³¡³»±â\n"
-				+ "--------------------------\n"
-				+ "¼±ÅÃ : ";
-		
+		String menu = "========== íšŒì› ê´€ë¦¬ í”„ë¡œê·¸ë¨ ==========\n"
+					+ "1.íšŒì› ì „ì²´ì¡°íšŒ\n"
+					+ "2.íšŒì› ì•„ì´ë””ì¡°íšŒ\n" 
+					+ "3.íšŒì› ì´ë¦„ì¡°íšŒ\n" 
+					+ "4.íšŒì› ê°€ì…\n" 
+					+ "5.íšŒì› ì •ë³´ë³€ê²½\n" 
+					+ "6.íšŒì› íƒˆí‡´\n" 
+					+ "0.í”„ë¡œê·¸ë¨ ëë‚´ê¸°\n"
+					+ "----------------------------------\n"
+					+ "ì„ íƒ : "; 
 		
 		while(true) {
 			System.out.print(menu);
 			int choice = sc.nextInt();
 			Member member = null;
 			int result = 0;
-			String msg =null;
+			String msg = null;
 			List<Member> list = null;
 			String memberId = null;
-			String memberName = null;
-			String memberUpdateId = null;
-			String memberUpdatePassword = null;
-			String memberDeleteId = null;
-			String memberDeletePassword = null;
-			
+					
 			switch(choice) {
-				case 1:
+				case 1: 
 					list = memberController.selectAll();
 					displayMemberList(list);
 					break;
 				case 2: 
-					//¾ÆÀÌµğ¸¦ Àß ÀÔ·Â -> 1Çà ÀÔ·ÂX ->0Çà
 					memberId = inputMemberId();
 					member = memberController.selectOne(memberId);
 					displayMember(member);
 					break;
-				case 3: 
-					memberName =  inputMemberName();
-					member = memberController.selectName(memberName);
-					displayMemberName(member);
-					break;
+				case 3: break;
 				case 4: 
-					//1.½Å±ÔÈ¸¿øÁ¤º¸ ÀÔ·Â ->Member°´Ã¼
+					//1.ì‹ ê·œíšŒì›ì •ë³´ ì…ë ¥ -> Memberê°ì²´
 					member = inputMember();
-					System.out.println("½Å±ÔÈ¸¿ø È®ÀÎ : "+member);
-					//2.controller¿¡ È¸¿ø°¡ÀÔ ¿äÃ»(¸Ş¼ÒµåÈ£Ãâ) ÀÌ¶§ Member°´Ã¼¸¦ Àü´Ş. 
-					// ->int¸®ÅÏ(Ã³¸®µÈ ÇàÀÇ °³¼ö)
+					System.out.println(">>> ì‹ ê·œíšŒì› í™•ì¸ : " + member);
+					//2.controllerì— íšŒì›ê°€ì… ìš”ì²­(ë©”ì†Œë“œí˜¸ì¶œ) -> intë¦¬í„´(ì²˜ë¦¬ëœ í–‰ì˜ ê°œìˆ˜)
 					result = memberController.insertMember(member);
-					//3.int¿¡ µû¸¥ ºĞ±âÃ³¸®
-					msg = result > 0 ? "È¸¿ø °¡ÀÔ ¼º°ø!" :"È¸¿ø °¡ÀÔ ½ÇÆĞ!";
+					//3.intì— ë”°ë¥¸ ë¶„ê¸°ì²˜ë¦¬
+					msg = result > 0 ? "íšŒì› ê°€ì… ì„±ê³µ!" : "íšŒì› ê°€ì… ì‹¤íŒ¨!";
 					displayMsg(msg);
 					break;
-				case 5: 
-					memberUpdateId = inputId("º¯°æ");
-					memberUpdatePassword = inputPassword("º¯°æ");
-					list = memberController.selectAll();
-					member = searchMem(memberUpdateId,memberUpdatePassword,list);
-					//ÀÔ·ÂÇÑ id¿¡ ÇØ´çÇÏ´Â °´Ã¼¸¦ Àü´Ş
-					if(member != null) {
-						member = inputUpdate(member);						
-						result = memberController.selectUpdate(memberUpdateId,memberUpdatePassword,member);
-						msg = result > 0 ? "È¸¿ø Á¤º¸ ¼öÁ¤ ¼º°ø!" :"È¸¿ø Á¤º¸ ¼öÁ¤ ½ÇÆĞ!";
-						displayMsg(msg);
-						displayMember(member);
-					}
+				case 5: break;
+				case 6: break;
+				case 0: 
+					System.out.print("ì •ë§ë¡œ ëë‚´ì‹œê² ìŠµë‹ˆê¹Œ?(y/n) : ");
+					if(sc.next().charAt(0) == 'y')
+						return;//í˜„ì¬ë©”ì†Œë“œ(mainMenu)ë¥¼ í˜¸ì¶œí•œ ê³³
 					break;
-				case 6: 
-					memberDeleteId = inputId("»èÁ¦");
-					memberDeletePassword = inputPassword("»èÁ¦");
-					result = memberController.selectDelete(memberDeleteId,memberDeletePassword);
-					msg = result > 0 ? "È¸¿ø Å»Åğ ¼º°ø!" :"È¸¿ø Å»Åğ ½ÇÆĞ!";
-					displayMsg(msg);
-					break;
-				case 0:
-					System.out.print("Á¤¸»·Î ³¡³»½Ã°Ú½À´Ï±î?(y/n) : ");
-					if(sc.next().toLowerCase().charAt(0)== 'y')
-						return; //ÇöÀç¸Ş¼Òµå(mainMenu)¸¦ È£ÃâÇÑ °÷À¸·Î µ¹¾Æ°¨
-					break;
-				default:
-					System.out.println("---Àß¸øÀÔ·ÂÇÏ¼Ì½À´Ï´Ù---");
-			}
-		}
-		
-	}
-
-	
-	//5,6 ¼±ÅÃÇßÀ» ¶§ password ÀÔ·Â
-	private String inputPassword(String select) {
-		System.out.print(select+"ÇÒ idÀÇ ºñ¹Ğ¹øÈ£ ÀÔ·Â : ");
-		return sc.next();
-		
-	}
-
-
-
-	//5,6 ¼±ÅÃÇßÀ» ¶§ id ÀÔ·Â
-	private String inputId(String select) {
-		System.out.print(select+"ÇÒ id ÀÔ·Â : ");
-		return sc.next();
-	}
-
-	//ÀÔ·ÂÇÑ id,ºñ¹Ğ¹øÈ£¿Í ÀÏÄ¡ÇÏ´Â ÇØ´çÇÏ´Â °´Ã¼¸¦ Àü´Ş
-	private Member searchMem(String memberUpdateId, String memberUpdatePassword, List<Member> list) {
-		for(Member member :list) {
-			if(memberUpdateId.equals(member.getMemberId())&&memberUpdatePassword.equals(member.getPassword())) {
-				return member;
+				default: 
+					System.out.println("ì˜ëª» ì…ë ¥í•˜ì…¨ìŠµë‹ˆë‹¤.");
 			}	
 		}
-		return null;
-	}
-	
-
-	/**
-	 * ¼öÁ¤ÇÒ Á¤º¸ ÀÔ·Â
-	 * @param memberUpdate 
-	 * @return
-	 */
-	private Member inputUpdate(Member member) {
-		System.out.println("¼öÁ¤ÇÒ È¸¿øÁ¤º¸¸¦ ÀÔ·ÂÇÏ¼¼¿ä.");
-			System.out.print("ºñ¹Ğ¹øÈ£: ");
-			member.setPassword(sc.next());
-			System.out.print("ÀÌ¸ŞÀÏ : ");
-			member.setEmail(sc.next());
-			System.out.print("ÀüÈ­¹øÈ£(-»©°í ÀÔ·Â) : ");
-			member.setPhone(sc.next());
-			sc.nextLine(); //¹öÆÛ¿¡ ³²Àº °³Çà¹®ÀÚ ³¯¸®±â ¿ë(next°è¿­ - nextLine) next¿Í nextLine »çÀÌ ÇÑ¹ø 
-			System.out.print("ÁÖ¼Ò: ");
-			member.setAddress(sc.nextLine());
-			System.out.print("Ãë¹Ì : ");
-			member.setHobby(sc.next());
-		return member;
-		
-	}
-
-
-
-
-	/**
-	 * DB¿¡¼­ Á¤º¸¸¦ ¼öÁ¤ÇÒ idÀ» ÀÔ·Â
-	 * @return
-	 */
-	private String inputUpdateId() {
-		System.out.print("¼öÁ¤ÇÒ id ÀÔ·Â : ");
-		return sc.next();
 	}
 
 	/**
-	 * DB¿¡¼­ Á¶È¸ÇÑ ÀÌ¸§ Ãâ·Â
-	 * @param member
-	 */
-	private void displayMemberName(Member member) {
-		if(member == null)
-			System.out.println(">>>> Á¶È¸µÈ È¸¿øÀÌ ¾ø½À´Ï´Ù.");
-		else {
-			System.out.println("*******************************************************");
-			System.out.println(member);
-			System.out.println("*******************************************************");
-		}
-	}
-
-	/**
-	 * DB¿¡¼­ ÀÌ¸§ Á¶È¸
-	 * 
-	 */
-	private String inputMemberName() {
-		System.out.print("Á¶È¸ÇÒ ÀÌ¸§ ÀÔ·Â : ");
-		return sc.next();
-	}
- 
-	/**
-	 * DB¿¡¼­ Á¶È¸ÇÑ 1¸íÀÇ È¸¿ø Ãâ·Â
+	 * DBì—ì„œ ì¡°íšŒí•œ 1ëª…ì˜ íšŒì› ì¶œë ¥
 	 * @param member
 	 */
 	private void displayMember(Member member) {
 		if(member == null)
-			System.out.println(">>>> Á¶È¸µÈ È¸¿øÀÌ ¾ø½À´Ï´Ù.");
+			System.out.println(">>>> ì¡°íšŒëœ íšŒì›ì´ ì—†ìŠµë‹ˆë‹¤.");
 		else {
-			System.out.println("*******************************************************");
+			System.out.println("****************************************************************");
 			System.out.println(member);
-			System.out.println("*******************************************************");
-	
+			System.out.println("****************************************************************");
 		}
 	}
-	
+
 	/**
-	 * Á¶È¸ÇÒ È¸¿ø¾ÆÀÌµğ ÀÔ·Â
+	 * ì¡°íšŒí•  íšŒì›ì•„ì´ë”” ì…ë ¥
 	 * @return
 	 */
 	private String inputMemberId() {
-		System.out.print("Á¶È¸ÇÒ ¾ÆÀÌµğ ÀÔ·Â : ");
+		System.out.print("ì¡°íšŒí•  ì•„ì´ë”” ì…ë ¥ : ");
 		return sc.next();
 	}
 
 	/**
-	 * DB¿¡¼­ Á¶È¸µÈ È¸¿ø°´Ã¼ n°³¸¦ Ãâ·Â
+	 * DBì—ì„œ ì¡°íšŒëœ íšŒì›ê°ì²´ nê°œë¥¼ ì¶œë ¥
 	 * @param list
 	 */
 	private void displayMemberList(List<Member> list) {
 		if(list == null || list.isEmpty()) {
-			System.out.println(">>>> Á¶È¸µÈ ÇàÀÌ ¾ø½À´Ï´Ù.");
+			System.out.println(">>>> ì¡°íšŒëœ í–‰ì´ ì—†ìŠµë‹ˆë‹¤.");	
 		}
 		else {
-			System.out.println("************************************************************************************");
-			for(Member m :list) {
+			System.out.println("*********************************************************");
+			for(Member m : list) {
 				System.out.println(m);
 			}
-			System.out.println("************************************************************************************");
+			System.out.println("*********************************************************");
 		}
 	}
 
 	/**
-	 * DMLÃ³¸®°á°ú Åëº¸¿ë
+	 * DMLì²˜ë¦¬ê²°ê³¼ í†µë³´ìš© 
+	 * @param msg
 	 */
 	private void displayMsg(String msg) {
-		System.out.println(">>> Ã³¸®°á°ú : " + msg);
+		System.out.println(">>> ì²˜ë¦¬ê²°ê³¼ : " + msg);
 	}
 
 	/**
-	 * ½Å±ÔÈ¸¿ø Á¤º¸ ÀÔ·Â
-	 * 
+	 * ì‹ ê·œíšŒì› ì •ë³´ ì…ë ¥
+	 * @return
 	 */
 	private Member inputMember() {
-		System.out.println("»õ·Î¿î È¸¿øÁ¤º¸¸¦ ÀÔ·ÂÇÏ¼¼¿ä.");
+		System.out.println("ìƒˆë¡œìš´ íšŒì›ì •ë³´ë¥¼ ì…ë ¥í•˜ì„¸ìš”.");
 		Member member = new Member();
-		System.out.print("¾ÆÀÌµğ : ");
+		System.out.print("ì•„ì´ë”” : ");
 		member.setMemberId(sc.next());
-		System.out.print("ÀÌ¸§ : ");
+		System.out.print("ì´ë¦„ : ");
 		member.setMemberName(sc.next());
-		System.out.print("ºñ¹Ğ¹øÈ£: ");
+		System.out.print("ë¹„ë°€ë²ˆí˜¸ : ");
 		member.setPassword(sc.next());
-		System.out.print("³ªÀÌ: ");
+		System.out.print("ë‚˜ì´ : ");
 		member.setAge(sc.nextInt());
-		System.out.print("¼ºº°(M/F) : "); //m, f ¾È‰Î
-		member.setGender(String.valueOf(sc.next().toUpperCase().charAt(0)));//String.valueOf ->StringÀ¸·Î º¯È­
-		System.out.print("ÀÌ¸ŞÀÏ : ");
+		System.out.print("ì„±ë³„(M/F) : ");//m, f
+		member.setGender(String.valueOf(sc.next().toUpperCase().charAt(0)));
+		System.out.print("ì´ë©”ì¼: ");
 		member.setEmail(sc.next());
-		System.out.print("ÀüÈ­¹øÈ£(-»©°í ÀÔ·Â) : ");
+		System.out.print("ì „í™”ë²ˆí˜¸(-ë¹¼ê³  ì…ë ¥) : ");
 		member.setPhone(sc.next());
-		sc.nextLine(); //¹öÆÛ¿¡ ³²Àº °³Çà¹®ÀÚ ³¯¸®±â ¿ë(next°è¿­ - nextLine) next¿Í nextLine »çÀÌ ÇÑ¹ø 
-		System.out.print("ÁÖ¼Ò: ");
+		sc.nextLine();//ë²„í¼ì— ë‚¨ì€ ê°œí–‰ë¬¸ì ë‚ ë¦¬ê¸°ìš© (nextê³„ì—´ - nextLine)
+		System.out.print("ì£¼ì†Œ : ");
 		member.setAddress(sc.nextLine());
-		System.out.print("Ãë¹Ì : ");
-		member.setHobby(sc.next());
+		System.out.print("ì·¨ë¯¸(,ë¡œ ë‚˜ì—´í• ê²ƒ) : ");
+		member.setHobby(sc.nextLine());
 		return member;
 	}
 
 }
+
+
+
+
+
+
+

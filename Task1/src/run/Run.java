@@ -5,9 +5,8 @@ import member.view.MemberMenu;
 public class Run {
 
 	public static void main(String[] args) {
-		new MemberMenu().mainMenu(); //°´Ã¼¸¸µé¾îÁÖ°ímainMenu¸Ş¼­µå ½ÇÇà
-		// »ç¿ëÀÚ¿¡°Ô º¸¿©Áú ¸Ş´º
-		System.out.println("---- ÇÁ·Î±×·¥ Á¾·á ----");
+		new MemberMenu().mainMenu(); 
+		System.out.println("---- í”„ë¡œê·¸ë¨ ì¢…ë£Œ ----");
 	}
 
 }
