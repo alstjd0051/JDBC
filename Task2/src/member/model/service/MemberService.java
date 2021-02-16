@@ -155,5 +155,20 @@ public class MemberService {
 		return result;
 	}
 
+	public Member selectOne(String memberId) {
+		return null;
+	}
+
+	public int deleteMember(Member member) {
+		Connection conn = getConnection();
+		int result = memberDAO.deleteMember(conn, member);
+		if(result > 0)
+			commit(conn);
+		else
+			rollback(conn);
+		close(conn);
+		return result;
+	}
+
 
 }

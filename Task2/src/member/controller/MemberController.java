@@ -45,4 +45,8 @@ public class MemberController {
 	public int newAddress(String address, Member member) {
 		return memberService.newAddress(address,member);
 	}
+
+	public int deleteMember(Member member) {
+		return memberService.deleteMember(member);
+	}
 }

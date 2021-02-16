@@ -298,6 +298,22 @@ public class MemberDAO {
 		return result;
 	}
 
+	public int deleteMember(Connection conn, Member member) {
+		PreparedStatement pstmt = null;
+		int result = 0;
+		String sql = "delete member where member_id = ? and password ?";
+		try {
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setString(1, member.getMemberId());
+			pstmt.setString(2, member.getPassword());
+			result = pstmt.executeUpdate();
+		}
+		catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return result;
+	}
+
 	
 
 }
